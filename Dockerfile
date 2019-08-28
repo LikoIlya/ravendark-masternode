@@ -46,7 +46,11 @@ WORKDIR /ravendark
 COPY . .
 
 RUN ./autogen.sh && \
- ./configure --without-gui && make
+  ./configure  --disable-tests \
+  --disable-bench --disable-static  \
+  --without-gui --disable-zmq \ 
+  --with-incompatible-bdb \
+  CFLAGS='-w' CXXFLAGS='-w' && make
 
 RUN ln -sf /ravendark/src/ravendarkd /usr/bin/ravendarkd
 RUN ln -sf /ravendark/src/ravendark-cli /usr/bin/ravendark-cli
