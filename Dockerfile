@@ -1,7 +1,10 @@
+FROM ubuntu:trusty
+
 ARG MNPRIVKEY
 ARG MNIP
 
-FROM ubuntu:trusty
+ENV PRIVKEY=${MNPRIVKEY}
+ENV IP=${MNIP}
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -59,10 +62,9 @@ RUN chmod +x entrypoint.sh
 
 EXPOSE 17207 7207 17107 16666 16665 6665 6666
 
-VOLUME /root/.ravendarkcore
 COPY ravendark.conf /root/.ravendarkcore/ravendark.conf
-RUN sed 's/<MNPRIVKEY>/${MNPRIVKEY}/g' /root/.ravendarkcore/ravendark.conf
-RUN sed 's/<MNIP>/${MNIP}/g' /root/.ravendarkcore/ravendark.conf
+RUN sed -i 's/<MNPRIVKEY>/'$PRIVKEY'/g' /root/.ravendarkcore/ravendark.conf
+RUN sed -i 's/<MNIP>/'$IP'/g' /root/.ravendarkcore/ravendark.conf 
 
 ENTRYPOINT ["./entrypoint.sh"]
 
