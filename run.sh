@@ -26,6 +26,7 @@ done
 if [ "$MNKEY" = "" ]
 then
     echo "MNKEY"
+    echo "$MNKEY"
     usage
 fi
 if [ "$ADDRESS" = "" ]
@@ -45,8 +46,6 @@ sudo dd if=/dev/zero of=swapfile bs=1M count=3000 && \
 sudo mkswap swapfile && \
 sudo chmod 0600 swapfile && \
 sudo swapon swapfile
-
-echo "$MNKEY" > nohup.out
 
 sudo docker build --build-arg MNPRIVKEY="$MNKEY" --build-arg MNIP="$ADDRESS" -t ravendark-mn:latest .
 sudo docker run -p 80:80 -p 443:443 -p 16665:16665 -p 16666:16666 -p 6666:6666 -p 17207:17207 -p 7207:7207 -p 17107:17107 -p 6665:6665 -d --name ravendark-mn ravendark-mn:latest
