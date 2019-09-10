@@ -40,29 +40,19 @@ RUN apt-get install -y \
   libboost-test-dev \
   libboost-thread-dev
 
-ENV VERSION=0.3.2
+RUN mkdir /ravendark
+
+RUN git clone https://gitlab.com/LikoIlya/raven-bin.git /ravendark
 
 WORKDIR /ravendark
-COPY . .
 
-RUN ./autogen.sh && \
-  ./configure  --disable-tests \
-  --disable-bench --disable-static  \
-  --without-gui --disable-zmq \ 
-  --with-incompatible-bdb \
-  CFLAGS='-w' CXXFLAGS='-w' && make
+RUN chmod +x ./ravendarkd
+RUN chmod +x ./ravendark-cli
 
-RUN ln -sf /ravendark/src/ravendarkd /usr/bin/ravendarkd
-RUN ln -sf /ravendark/src/ravendark-cli /usr/bin/ravendark-cli
-
-WORKDIR /ravendark/src
-
-RUN apt-get autoclean && \
-  apt-get autoremove -y
+RUN ln -sf /ravendark/ravendarkd /usr/bin/ravendarkd
+RUN ln -sf /ravendark/ravendark-cli /usr/bin/ravendark-cli
 
 WORKDIR /ravendark
-COPY entrypoint.sh ./entrypoint.sh
-RUN chmod +x entrypoint.sh
 
 EXPOSE 17207 7207 17107 16666 16665 6665 6666
 
@@ -70,5 +60,7 @@ COPY ravendark.conf /root/.ravendarkcore/ravendark.conf
 RUN sed -i 's/<MNPRIVKEY>/'$PRIVKEY'/g' /root/.ravendarkcore/ravendark.conf
 RUN sed -i 's/<MNIP>/'$IP'/g' /root/.ravendarkcore/ravendark.conf 
 
+COPY entrypoint.sh ./entrypoint.sh
+RUN chmod +x entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
 
