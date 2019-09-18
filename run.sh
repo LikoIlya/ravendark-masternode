@@ -26,7 +26,6 @@ done
 if [ "$MNKEY" = "" ]
 then
     echo "MNKEY"
-    echo "$MNKEY"
     usage
 fi
 if [ "$ADDRESS" = "" ]
