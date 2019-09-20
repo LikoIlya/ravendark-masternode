@@ -41,9 +41,9 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && 
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" && \
 sudo apt-get update && sudo apt-get install -y docker-ce
 
-sudo dd if=/dev/zero of=swapfile bs=1M count=3000 && \
+sudo dd if=/dev/zero of=swapfile bs=1M count=4096 && \
 sudo mkswap swapfile && \
-sudo chmod 0600 swapfile && \
+sudo chmod 0644 swapfile && \
 sudo swapon swapfile
 
 sudo docker build --build-arg MNPRIVKEY="$MNKEY" --build-arg MNIP="$ADDRESS" -t ravendark-mn:latest .
