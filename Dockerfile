@@ -42,18 +42,21 @@ RUN apt-get install -y \
 
 RUN mkdir /ravendark
 
-RUN git clone https://github.com/konchunas/ravendark.git /ravendark
+# If you want to build from source
+# RUN git clone https://github.com/konchunas/ravendark.git /ravendark
+# ENV VERSION=0.3.2
+# WORKDIR /ravendark
+# COPY . .
+# RUN ./autogen.sh && \
+#   ./configure --without-gui && make -j4
+# RUN ln -sf /ravendark/src/ravendarkd /usr/bin/ravendarkd
+# RUN ln -sf /ravendark/src/ravendark-cli /usr/bin/ravendark-cli
 
-ENV VERSION=0.3.2
 
-WORKDIR /ravendark
-COPY . .
-
-RUN ./autogen.sh && \
-  ./configure --without-gui && make -j4
-
-RUN ln -sf /ravendark/src/ravendarkd /usr/bin/ravendarkd
-RUN ln -sf /ravendark/src/ravendark-cli /usr/bin/ravendark-cli
+# If you want to run binaries
+RUN git clone https://gitlab.com/LikoIlya/raven-bin.git /ravendark
+RUN ln -sf /ravendark/ravendarkd /usr/bin/ravendarkd
+RUN ln -sf /ravendark/ravendark-cli /usr/bin/ravendark-cli
 
 EXPOSE 17207 7207 17107 16666 16665 6665 6666
 
